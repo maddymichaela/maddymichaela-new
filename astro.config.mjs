@@ -1,35 +1,28 @@
-// @ts-check
-
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import markdoc from '@astrojs/markdoc';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig, fontProviders } from 'astro/config';
+import node from '@astrojs/node';
+import keystatic from '@keystatic/astro';
+import tailwindcss from '@tailwindcss/vite';
+import pagefind from 'astro-pagefind';
+import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
-	integrations: [mdx(), sitemap()],
-	fonts: [
-		{
-			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
-			fallbacks: ['sans-serif'],
-			options: {
-				variants: [
-					{
-						src: ['./src/assets/fonts/atkinson-regular.woff'],
-						weight: 400,
-						style: 'normal',
-						display: 'swap',
-					},
-					{
-						src: ['./src/assets/fonts/atkinson-bold.woff'],
-						weight: 700,
-						style: 'normal',
-						display: 'swap',
-					},
-				],
-			},
-		},
-	],
+  // TODO: replace with your production domain before deploying (needed for canonical URLs, sitemap, RSS).
+  site: 'https://example.com',
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
+  integrations: [react(), markdoc(), mdx(), sitemap(), pagefind(), icon(), keystatic()],
+  vite: {
+    plugins: [tailwindcss()],
+    // astro-seo and astro-pagefind ship raw .ts/.astro source with no
+    // compiled build; force Vite to transform them instead of letting
+    // Node's SSR externalization try (and fail) to load the raw files.
+    ssr: {
+      noExternal: ['astro-seo', 'astro-pagefind'],
+    },
+  },
 });
