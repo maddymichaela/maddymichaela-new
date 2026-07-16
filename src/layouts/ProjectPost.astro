@@ -14,16 +14,34 @@ interface Props {
 	heroImage?: ImageMetadata;
 	Content?: any;
 	tags?: string[];
+	category?: 'work' | 'personal';
+	personalCategory?: 'cyberdeck' | 'nas' | 'crafts' | 'other';
 }
 
-const { title, description, pubDate, updatedDate, heroImage, tags = [], Content } = Astro.props as Props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], Content, category = 'personal', personalCategory } = Astro.props as Props;
+
+const categoryLabels = {
+	work: 'Work',
+	personal: 'Personal',
+} as const;
+
+const personalCategoryLabels = {
+	cyberdeck: 'Cyberdeck',
+	nas: 'NAS',
+	crafts: 'Crafts',
+	other: 'Other',
+} as const;
+
+const eyebrow = category === 'personal' && personalCategory
+	? `${categoryLabels[category]} · ${personalCategoryLabels[personalCategory]}`
+	: categoryLabels[category];
 ---
 
 <BaseLayout title={title} description={description} image={heroImage}>
 	<div class="flex-1 flex flex-col py-12 md:py-16 lg:py-20 space-y-16">
 	<article class="post-page max-w-4xl w-full mx-auto">
 		<header class="section-heading">
-			<p class="eyebrow">Project</p>
+			<p class="eyebrow">{eyebrow}</p>
 			<h1>{title}</h1>
 			<p class="post-meta">
 				<FormattedDate date={pubDate} />

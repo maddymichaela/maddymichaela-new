@@ -8,6 +8,7 @@ export async function getSite() {
 	const author = await getEntry('site', 'author');
 	const social = await getEntry('site', 'social');
 	return {
+		title: author?.data?.name ?? 'Madeline Lim',
 		author: author?.data,
 		social: social?.data,
 	};

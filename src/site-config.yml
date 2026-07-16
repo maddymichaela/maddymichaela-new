@@ -1,19 +1,16 @@
 author:
-  name: Dasein
-  role: PhD in Philosophy
-  bio:  Known for contributions to phenomenology, hermeneutics, and existentialism.
-  location: Munich, Germany
+  name: Madeline Lim
+  role: UIUX Specialist
+  bio: I design and build ecommerce experiences across UX, frontend development, content operations, and Salesforce Commerce Cloud.
+  location: Singapore
 
 social:
-  - id: "x"
-    label: "X"
-    href: "#_"
   - id: "github"
     label: "GitHub"
-    href: "https://github.com/roicort"
+    href: "https://github.com/meowdaline"
   - id: "linkedin"
     label: "Linkedin"
-    href: "#_"
+    href: "https://www.linkedin.com/in/maddymichaela/"
   - id: "email"
     label: "Email"
-    href: "mailto:"
+    href: "mailto:design@maddymichaela.com"

@@ -11,7 +11,7 @@ const site = await getSite();
 
 interface Props {
 	title: string;
-	description: string;
+	description?: string;
 	image?: ImageMetadata;
 }
 
@@ -35,7 +35,7 @@ const imageURL = new URL((image as ImageMetadata).src, Astro.site ?? Astro.url);
 		},
 		optional: {
 			description,
-			siteName: site.author.name || 'Dasein',
+			siteName: site.author.name || 'Madeline Lim',
 		},
 	}}
 	twitter={{

@@ -14,14 +14,14 @@ const cv = (await getCollection('cv' as any)) as any[];
 const site = await getSite();
 ---
 
-<PageLayout title={site.author.name || 'Dasein'}>
+<PageLayout title={site.author.name || 'Madeline Lim'}>
 	<Hero
-		title={site.author.name || 'Dasein'}
+		title={site.author.name || 'Madeline Lim'}
 		description={site.author.bio || 'Welcome to my personal website.'}
 		role={site.author.role}
 		location={site.author.location}
 		actions={[
-			{ label: 'View Blog', href: '/blog' },
+			{ label: 'Personal Projects', href: '/personal-projects' },
 			{ label: 'Get Quote', href: '/contact' },
 		]}
 	/>
@@ -30,7 +30,7 @@ const site = await getSite();
 
 	<ProjectList heading="Projects" limit={4} viewAllHref="/projects" />
 
-	<PostList heading="Blog" limit={3} viewAllHref="/blog" />
+	<PostList heading="Personal Projects" limit={3} viewAllHref="/personal-projects" />
 
 	<!-- Sections (from src/content/cv.yml) -->
 	{

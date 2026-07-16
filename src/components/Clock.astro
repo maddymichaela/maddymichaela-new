@@ -32,7 +32,8 @@ const initialTime = new Intl.DateTimeFormat(locale, {
 	{initialTime}
 </span>
 
-<script>
+<script is:inline>
+	// @ts-nocheck
 	const clocks = document.querySelectorAll('.clock');
 
 	const formatTime = (date, { locale, timeZone, hour12, showSeconds }) => {
@@ -48,6 +49,8 @@ const initialTime = new Intl.DateTimeFormat(locale, {
 	};
 
 	clocks.forEach((el) => {
+		if (!(el instanceof HTMLElement)) return;
+
 		const timeZone = el.dataset.timezone || 'UTC';
 		const locale = el.dataset.locale || 'en-US';
 		const hour12 = el.dataset.hour12 === 'true';

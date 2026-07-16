@@ -8,9 +8,11 @@ interface Props {
 	href: string;
 	description?: string;
 	date?: Date | string;
-		image?: ImageMetadata | string;
+	image?: ImageMetadata | string;
 	imageAlt?: string;
 	eyebrow?: string;
+	variant?: 'post' | 'project';
+	cta?: string;
 }
 
 const { title, href, description, date, image, imageAlt = '', eyebrow } = Astro.props as Props;

@@ -12,6 +12,8 @@ interface RawPost {
         description?: string;
         heroImage?: any;
         pubDate?: Date | string;
+        category?: 'work' | 'personal';
+        personalCategory?: string;
     };
 
     // flattened shape:
@@ -19,6 +21,8 @@ interface RawPost {
     description?: string;
     heroImage?: any;
     pubDate?: Date | string;
+    category?: 'work' | 'personal';
+    personalCategory?: string;
 
     // optional link if not a collection item:
     href?: string;
@@ -34,11 +38,11 @@ export interface Props {
 
 
 let {
-    heading = "Blog",
+    heading = "Personal Projects",
     posts = [],
     limit = 6,
     viewAllHref,
-    viewAllLabel = "View all posts",
+    viewAllLabel = "View all personal projects",
 } = Astro.props as Props;
 
 function getPostData(item: RawPost) {
@@ -47,14 +51,14 @@ function getPostData(item: RawPost) {
 
 if (posts.length === 0) {
     console.warn(
-        '[PostList] No posts provided; fetching from "blog" collection.'
+        '[PostList] No posts provided; fetching personal entries from "projects" collection.'
     );
-    posts = posts.concat(await getCollection("blog")).sort(
-        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+    posts = posts.concat(
+        (await getCollection("projects"))
+            .filter((project) => project.data.category === 'personal')
+            .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
     );
 }
-
-const subpath = import.meta.env.BASE_URL;
 
 const visiblePosts = typeof limit === "number" ? posts.slice(0, limit) : posts;
 
@@ -81,10 +85,10 @@ const visiblePosts = typeof limit === "number" ? posts.slice(0, limit) : posts;
                         const p = getPostData(post) || {};
                         const id = (post as any).id;
                         const href = id
-                            ? withBase(`/blog/${id}/`)
+                            ? withBase(`/projects/${id}/`)
                             : p.href
                                 ? withBase(p.href)
-                                : undefined;
+                                : withBase('/personal-projects/');
                         const rawDate = p.pubDate ?? null;
                         const pubDate = rawDate
                             ? rawDate instanceof Date
@@ -99,15 +103,16 @@ const visiblePosts = typeof limit === "number" ? posts.slice(0, limit) : posts;
                                 image={p.heroImage}
                                 imageAlt={p.title}
                                 description={p.description}
-                                date={pubDate}
+                                date={pubDate ?? undefined}
                                 variant="post"
+                                eyebrow={p.personalCategory}
                             />
                         );
                     })
                 }
                 <Card
                     title={viewAllLabel}
-                    href={withBase(viewAllHref ?? '/blog/')}
+                    href={withBase(viewAllHref ?? '/personal-projects/')}
                     variant="post"
                 />
             </div>

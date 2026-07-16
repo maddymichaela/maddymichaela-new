@@ -20,7 +20,6 @@
  * - Renders the same markup/styling as the original index Projects section.
  * - Link targets to external URLs get `target="_blank"` and `rel="noopener noreferrer"`.
  */
-import { Image } from "astro:assets";
 import Card from "./Card.astro";
 import { getCollection } from 'astro:content';
 import { withBase } from '../utils/slugify';
@@ -31,6 +30,8 @@ interface RawProject {
     description?: string;
     link?: string;
     image?: any;
+    category?: 'work' | 'personal';
+    personalCategory?: string;
 
     // ...or the content collection shape:
     data?: {
@@ -38,6 +39,9 @@ interface RawProject {
         description?: string;
         link?: string;
         image?: any;
+        category?: 'work' | 'personal';
+        personalCategory?: string;
+        pubDate?: Date | string;
     };
 }
 
@@ -61,18 +65,28 @@ function getProjectData(item: RawProject) {
     return item && (item as any).data ? (item as any).data : item;
 }
 
-function isExternal(href?: string) {
-    return typeof href === "string" && /^https?:\/\//i.test(href);
-}
-
 if (items.length === 0) {
     console.warn('[ProjectList] No items provided; fetching from "projects" collection.');
-    items = items.concat(await getCollection("projects")).sort(
-        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-    );
+    items = items.concat((await getCollection("projects")) as RawProject[]).sort((a, b) => {
+        const aDate = getProjectData(a).pubDate;
+        const bDate = getProjectData(b).pubDate;
+        return new Date(bDate ?? 0).valueOf() - new Date(aDate ?? 0).valueOf();
+    });
 }
 
 const visibleItems = typeof limit === "number" ? items.slice(0, limit) : items;
+
+const categoryLabels = {
+    work: 'Work',
+    personal: 'Personal',
+} as const;
+
+const personalCategoryLabels: Record<string, string> = {
+    cyberdeck: 'Cyberdeck',
+    nas: 'NAS',
+    crafts: 'Crafts',
+    other: 'Other',
+};
 
 const baseUrl =
     !import.meta.env.BASE_URL || import.meta.env.BASE_URL === "/"
@@ -100,8 +114,13 @@ const baseUrl =
                     visibleItems.map((item) => {
                         const p = getProjectData(item) || {};
                         const id = (item as any).id;
-                        const href = id ? withBase(`/projects/${id}/`) : p.link;
-                        const external = isExternal(href);
+                        const href = id ? withBase(`/projects/${id}/`) : (p.link ?? withBase('/projects/'));
+                        const category = p.category as keyof typeof categoryLabels | undefined;
+                        const eyebrow = category
+                            ? category === 'personal' && p.personalCategory
+                                ? `${categoryLabels[category]} · ${personalCategoryLabels[p.personalCategory] ?? p.personalCategory}`
+                                : categoryLabels[category]
+                            : undefined;
 
                         return (
                             <Card
@@ -110,6 +129,7 @@ const baseUrl =
                                 image={p.image}
                                 imageAlt={p.title}
                                 description={p.description}
+                                eyebrow={eyebrow}
                                 variant="project"
                                 cta="View project →"
                             />

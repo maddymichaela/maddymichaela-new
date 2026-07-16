@@ -1,0 +1,17 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectPost from '../../layouts/ProjectPost.astro';
+
+const slug = Astro.params.slug;
+const projects = await getCollection('projects');
+const project = projects.find((entry) => entry.id === slug);
+
+if (!project) {
+	return Astro.redirect('/projects/');
+}
+
+const { Content } = await render(project);
+---
+<ProjectPost {...project.data}>
+	<Content />
+</ProjectPost>
