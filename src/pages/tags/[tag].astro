@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Card from '../../components/Card.astro';
 import PageLayout from '../../layouts/PageLayout.astro';
 import { getSite } from '../../utils/consts';
+import { projectPath } from '../../utils/projectRoutes';
 import { slugify, withBase } from '../../utils/slugify';
 
 const site = await getSite();
@@ -34,7 +35,7 @@ projects.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 				{projects.map((project) => (
 					<Card
 						title={project.data.title}
-						href={withBase(`/projects/${project.id}/`)}
+						href={withBase(projectPath(project.id, project.data.category))}
 						description={project.data.description}
 						date={project.data.pubDate}
 						image={project.data.heroImage}

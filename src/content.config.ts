@@ -35,7 +35,7 @@ const projects = defineCollection({
 });
 
 const site = defineCollection({
-  loader: file('src/site-config.yml'),
+  loader: file('src/site-config.yaml'),
 });
 
 const cv = defineCollection({

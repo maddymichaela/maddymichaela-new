@@ -1,12 +1,13 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { withBase } from '../utils/slugify';
+import '../styles/components/header-link.css';
 
 type Props = HTMLAttributes<'a'> & {
 	activeClass?: string;
 };
 
-const { href, class: className, activeClass = 'text-ink underline', ...props } = Astro.props;
+const { href, class: className, activeClass = 'header-link--active', ...props } = Astro.props;
 
 const pathname = Astro.url.pathname;
 const newhref = href ? withBase(String(href)) : withBase('/');
@@ -14,6 +15,6 @@ const isActive = href ? pathname === newhref || pathname === `${newhref}/` : fal
 
 ---
 
-<a href={newhref} class:list={[className, isActive && activeClass]} {...props}>
+<a href={newhref} class:list={['header-link', className, isActive && activeClass]} {...props}>
 	<slot />
 </a>

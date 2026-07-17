@@ -19,25 +19,27 @@ const {
   copy,
   stats = [],
 } = Astro.props as Props;
+
+import '../styles/components/numbers.css';
 ---
 
-<section class="space-y-6">
-  <header class="space-y-2 max-w-2xl">
-    {eyebrow && <p class="eyebrow m-0">{eyebrow}</p>}
-    {title && <h2 class="text-3xl sm:text-4xl font-semibold leading-tight text-ink m-0">{title}</h2>}
-    {copy && <p class="text-muted m-0">{copy}</p>}
+<section class="numbers">
+  <header class="numbers__header">
+    {eyebrow && <p class="numbers__eyebrow">{eyebrow}</p>}
+    {title && <h2 class="numbers__title">{title}</h2>}
+    {copy && <p class="numbers__copy">{copy}</p>}
   </header>
 
   {stats.length > 0 && (
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="numbers__grid">
       {stats.map((stat) => (
-        <div class="rounded-2xl border border-border bg-surface px-5 py-6 shadow-[0_8px_40px_-24px_color-mix(in_oklab,var(--color-ink)_40%,transparent)]">
-          <div class="flex items-baseline gap-2">
-            <p class="text-3xl sm:text-4xl font-semibold tracking-tight text-ink m-0">{stat.value}</p>
-            {stat.delta && <span class="text-xs font-semibold text-muted uppercase tracking-[0.12em]">{stat.delta}</span>}
+        <div class="numbers__card">
+          <div class="numbers__value-row">
+            <p class="numbers__value">{stat.value}</p>
+            {stat.delta && <span class="numbers__delta">{stat.delta}</span>}
           </div>
-          <p class="text-sm uppercase tracking-[0.22em] text-muted m-0 mt-2">{stat.label}</p>
-          {stat.description && <p class="text-sm text-muted m-0 mt-2">{stat.description}</p>}
+          <p class="numbers__label">{stat.label}</p>
+          {stat.description && <p class="numbers__description">{stat.description}</p>}
         </div>
       ))}
     </div>

@@ -1,0 +1,16 @@
+.prose-content {
+	max-width: none;
+	color: var(--color-ink);
+}
+
+.prose-content :where(h1, h2, h3, h4, h5, h6) {
+	color: var(--color-ink);
+}
+
+.prose-content :where(p, ul, ol, blockquote) {
+	color: var(--color-muted);
+}
+
+html[data-theme='dark'] .prose-content {
+	color: var(--color-ink);
+}

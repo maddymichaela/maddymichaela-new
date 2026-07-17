@@ -1,0 +1,238 @@
+.search-trigger__hidden-label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.search-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 80;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	width: 100vw;
+	height: 100vh;
+	padding: clamp(12px, 4vw, 32px);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 180ms ease;
+}
+
+.search-modal.is-open {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.search-modal__backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	width: 100vw;
+	height: 100vh;
+	background: var(--color-paper, #f9f9f9);
+	backdrop-filter: blur(14px) saturate(1.2);
+	opacity: 0.94;
+}
+
+html[data-theme='dark'] .search-modal__backdrop {
+	background: color-mix(in oklab, var(--color-paper, #101012) 35%, #06060a 65%);
+}
+
+.search-modal__panel {
+	position: relative;
+	z-index: 1;
+	width: min(960px, 100%);
+	margin-top: clamp(32px, 6vh, 96px);
+	padding: clamp(1rem, 2vw, 1.5rem);
+	border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+	border-radius: 24px;
+	background: color-mix(in oklab, var(--color-surface, #fff) 94%, transparent);
+	box-shadow: 0 24px 80px color-mix(in oklab, var(--color-ink, #111) 12%, transparent);
+}
+
+.search-modal__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 0.75rem;
+}
+
+.search-modal__title h2 {
+	margin: 0.15rem 0 0;
+	font-size: clamp(1.2rem, 2vw, 1.45rem);
+}
+
+.search-modal__eyebrow {
+	margin: 0;
+	font-size: 0.7rem;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: var(--color-muted, #6b6b6b);
+}
+
+.search-modal__actions {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.65rem;
+}
+
+.search-modal__hint {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 42px;
+	padding: 0.35rem 0.5rem;
+	border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+	border-radius: 10px;
+	background: color-mix(in oklab, var(--color-surface, #fff) 85%, var(--color-ink, #111) 4%);
+	font-size: 0.72rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.search-close {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+	border-radius: 12px;
+	background: color-mix(in oklab, var(--color-surface, #fff) 90%, transparent);
+	color: var(--color-ink, currentColor);
+	cursor: pointer;
+	transition:
+		border-color 150ms ease,
+		background-color 150ms ease,
+		transform 150ms ease;
+}
+
+.search-close:hover {
+	border-color: color-mix(in oklab, var(--color-ink, #111) 26%, transparent);
+	background: color-mix(in oklab, var(--color-surface, #fff) 82%, var(--color-ink, #111) 6%);
+	transform: translateY(-1px);
+}
+
+.search-modal__footnote {
+	margin: 0.75rem 0 0;
+	font-size: 0.82rem;
+	color: var(--color-muted, #6b6b6b);
+}
+
+body.search-open {
+	overflow: hidden;
+}
+
+#search-modal .pagefind-ui {
+	width: 100%;
+}
+
+#search-modal .pagefind-ui__form {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	padding: 0.85rem 1rem;
+	border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+	border-radius: 18px;
+	background: color-mix(in oklab, var(--color-surface, #fff) 94%, transparent);
+	box-shadow:
+		inset 0 0 0 1px color-mix(in oklab, var(--color-ink, #111) 6%, transparent),
+		0 16px 36px color-mix(in oklab, var(--color-ink, #111) 10%, transparent);
+}
+
+#search-modal .pagefind-ui__search-input {
+	flex: 1;
+	border: none;
+	background: transparent;
+	font-size: 1rem;
+	color: var(--color-ink, currentColor);
+	outline: none;
+}
+
+#search-modal .pagefind-ui__search-clear {
+	padding: 0.35rem 0.5rem;
+	border: 1px solid transparent;
+	border-radius: 10px;
+	background: color-mix(in oklab, var(--color-ink, #111) 6%, transparent);
+	cursor: pointer;
+	transition:
+		border-color 120ms ease,
+		background-color 120ms ease;
+}
+
+#search-modal .pagefind-ui__search-clear:hover {
+	border-color: var(--color-border, rgba(0, 0, 0, 0.12));
+	background: color-mix(in oklab, var(--color-ink, #111) 8%, transparent);
+}
+
+#search-modal .pagefind-ui__results {
+	display: grid;
+	gap: 0.6rem;
+	max-height: 60vh;
+	margin-top: 1rem;
+	overflow-y: auto;
+}
+
+#search-modal .pagefind-ui__result {
+	padding: 0.9rem 1rem;
+	border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+	border-radius: 14px;
+	background: color-mix(in oklab, var(--color-surface, #fff) 92%, transparent);
+	transition:
+		border-color 120ms ease,
+		transform 120ms ease;
+}
+
+#search-modal .pagefind-ui__result:hover {
+	border-color: color-mix(in oklab, var(--color-ink, #111) 20%, transparent);
+	transform: translateY(-1px);
+}
+
+#search-modal .pagefind-ui__result-title {
+	margin: 0 0 0.35rem;
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+#search-modal .pagefind-ui__result-excerpt {
+	margin: 0;
+	color: var(--color-muted, #6b6b6b);
+}
+
+#search-modal .pagefind-ui__message {
+	text-align: left;
+	font-size: 0.95rem;
+	color: var(--color-muted, #6b6b6b);
+}
+
+@media (max-width: 720px) {
+	.search-modal__panel {
+		margin-top: clamp(16px, 5vh, 42px);
+		padding: 1rem;
+	}
+
+	.search-modal__header {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.search-modal__actions {
+		align-self: flex-end;
+	}
+
+	.search-trigger {
+		justify-content: center;
+	}
+
+	.search-trigger__label {
+		font-size: 0.74rem;
+	}
+}

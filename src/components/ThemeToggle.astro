@@ -1,5 +1,7 @@
 ---
 // Theme toggle button with local storage persistence
+import '../styles/components/theme-toggle.css';
+
 export interface Props {
   class?: string;
 }
@@ -10,13 +12,13 @@ const { class: className = '' } = Astro.props as Props;
 	type="button"
 	data-theme-toggle
 	aria-label="Toggle theme"
-	class={className}
+	class:list={['theme-toggle', className]}
 >
-	<span class="sr-only">Toggle theme</span>
-	<span class="theme-toggle__icon inline-flex [html[data-theme='dark']_&]:hidden [html[data-theme='blue']_&]:hidden" aria-hidden="true">
+	<span class="theme-toggle__hidden-label">Toggle theme</span>
+	<span class="theme-toggle__dark-label" aria-hidden="true">
 		Dark
 	</span>
-	<span class="theme-toggle__icon hidden [html[data-theme='dark']_&]:inline-flex" aria-hidden="true">
+	<span class="theme-toggle__light-label" aria-hidden="true">
 		Light
 	</span>
 </button>

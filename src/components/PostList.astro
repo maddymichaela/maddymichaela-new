@@ -2,7 +2,9 @@
 
 import Card from './Card.astro';
 import { getCollection } from 'astro:content';
+import { projectPath } from '../utils/projectRoutes';
 import { withBase } from '../utils/slugify';
+import '../styles/components/post-list.css';
 
 interface RawPost {
     // collection item shape:
@@ -64,28 +66,22 @@ const visiblePosts = typeof limit === "number" ? posts.slice(0, limit) : posts;
 
 ---
 
-<section class="content-shell">
-    <div>
-        <div
-            class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24 border-base-200"
-        >
-            <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-                <h2
-                    class="text-sm 2xl:text-xl text-base-900 font-bold uppercase"
-                >
+<section class="post-list">
+    <div class="post-list__inner">
+        <div class="post-list__grid">
+            <div class="post-list__heading">
+                <h2 class="post-list__title">
                     {heading}
                 </h2>
             </div>
 
-            <div
-                class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-20 gap-x-8"
-            >
+            <div class="post-list__items">
                 {
                     visiblePosts.map((post) => {
                         const p = getPostData(post) || {};
                         const id = (post as any).id;
                         const href = id
-                            ? withBase(`/projects/${id}/`)
+                            ? withBase(projectPath(id, p.category))
                             : p.href
                                 ? withBase(p.href)
                                 : withBase('/personal-projects/');

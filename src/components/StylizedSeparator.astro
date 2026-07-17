@@ -1,0 +1,17 @@
+---
+interface Props {
+	text: string;
+}
+
+const { text } = Astro.props as Props;
+const [before, ...afterParts] = text.split(' · ');
+const after = afterParts.join(' · ');
+---
+
+{after ? (
+	<>
+		{before}<span class="content-separator">·</span><span class="content-stylize">{after}</span>
+	</>
+) : (
+	text
+)}

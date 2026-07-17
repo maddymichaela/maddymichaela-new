@@ -104,7 +104,7 @@ export default config({
   singletons: {
     site: singleton({
       label: 'Site settings',
-      path: 'src/site-config.yml',
+      path: 'src/site-config',
       format: 'yaml',
       schema: {
         author: fields.object(

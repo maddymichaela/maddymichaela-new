@@ -1,0 +1,6 @@
+.page-layout {
+	display: flex;
+	flex-direction: column;
+	min-height: calc(100vh - var(--grid-cell) * 2);
+	padding-bottom: 4rem;
+}

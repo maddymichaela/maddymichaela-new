@@ -1,6 +1,7 @@
 import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
 import { getSite } from '../utils/consts';
+import { projectPath } from '../utils/projectRoutes';
 
 export async function GET(context) {
 	const projects = await getCollection('projects');
@@ -11,7 +12,7 @@ export async function GET(context) {
 		site: context.site,
 		items: projects.map((project) => ({
 			...project.data,
-			link: `/projects/${project.id}/`,
+			link: projectPath(project.id, project.data.category),
 		})),
 	});
 }

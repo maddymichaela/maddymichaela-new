@@ -1,0 +1,43 @@
+.theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+}
+
+.theme-toggle__hidden-label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.theme-toggle__dark-label,
+.theme-toggle__light-label {
+	align-items: center;
+}
+
+.theme-toggle__dark-label {
+	display: inline-flex;
+}
+
+.theme-toggle__light-label {
+	display: none;
+}
+
+html[data-theme='dark'] .theme-toggle__dark-label {
+	display: none;
+}
+
+html[data-theme='dark'] .theme-toggle__light-label {
+	display: inline-flex;
+}

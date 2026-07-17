@@ -1,0 +1,12 @@
+.header-link {
+	color: inherit;
+}
+
+.header-link:hover {
+	color: color-mix(in oklab, var(--color-ink) 50%, transparent);
+}
+
+.header-link--active {
+	color: var(--color-ink);
+	text-decoration: underline;
+}

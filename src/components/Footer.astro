@@ -2,34 +2,42 @@
 import { getSite } from "../utils/consts";
 
 import Clock from "./Clock.astro";
+import "../styles/components/footer.css";
 
 const today = new Date();
 const site = await getSite();
+const social = site.social ?? [];
 ---
 
-<footer class="py-8">
-  <div class="content-shell content-shell--flush">
-    <div class="grid gap-10 pb-10 md:grid-cols-2">
-      <div class="grid gap-8"></div>
-    </div>
-    <div
-      class="grid gap-6 pt-8 pb-4 md:flex md:items-center md:justify-between"
-    >
-      <p class="text-sm text-muted m-0">
-        &copy; {today.getFullYear()} {site.author?.name}. Built with care in Singapore.
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__bar">
+      <p class="site-footer__copyright">
+        &copy; 2026 {site.author?.name}.
       </p>
-      <div class="md:text-right space-y-2 md:space-y-1">
-        <div class="flex flex-wrap items-center gap-3 md:justify-end">
-          <p class="text-2xl sm:text-3xl font-semibold tracking-tight text-ink m-0">Singapore</p>
-          <Clock
-            timeZone="Asia/Singapore"
-            locale="en-SG"
-            hour12={false}
-            showSeconds={false}
-          />
-        </div>
-        <p class="text-sm text-subtle m-0">UIUX, ecommerce systems, tiny machines, and handmade things.</p>
+      <div class="site-footer__social-links" aria-label="Social links">
+        {
+          social.map((item) => (
+            <a
+              class="site-footer__social-link"
+              href={item.href}
+              target={item.href.startsWith("mailto:") ? undefined : "_blank"}
+              rel={item.href.startsWith("mailto:") ? undefined : "noreferrer"}
+            >
+              {item.label}
+            </a>
+          ))
+        }
       </div>
+      <!-- <div class="site-footer__location">
+        <p class="site-footer__city">Singapore</p>
+        <Clock
+          timeZone="Asia/Singapore"
+          locale="en-SG"
+          hour12={false}
+          showSeconds={false}
+        />
+      </div> -->
     </div>
   </div>
 </footer>

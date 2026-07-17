@@ -2,16 +2,16 @@
 /**
  * ProjectList.astro
  *
- * Reusable Projects section component.
+ * Reusable work section component.
  *
  * Props:
- * - heading?: string (default: "Projects")
+ * - heading?: string (default: "Work")
  * - items: Array of project-like objects. Each item may be either:
  *     - a plain object: { title, description?, link?, image? }
  *     - a collection item: { data: { title, description?, link?, image? } }
  * - limit?: number (default: 4) -> how many items to show
- * - viewAllHref?: string -> optional "View all projects" link
- * - viewAllLabel?: string (default: "View all projects")
+ * - viewAllHref?: string -> optional "View all work" link
+ * - viewAllLabel?: string (default: "View all work")
  *
  * Slots:
  * - default: optional slot rendered in the same spot as the "View all" link
@@ -22,7 +22,9 @@
  */
 import Card from "./Card.astro";
 import { getCollection } from 'astro:content';
+import { projectPath } from '../utils/projectRoutes';
 import { withBase } from '../utils/slugify';
+import '../styles/components/project-list.css';
 
 interface RawProject {
     // Either the flattened shape...
@@ -30,6 +32,7 @@ interface RawProject {
     description?: string;
     link?: string;
     image?: any;
+    heroImage?: any;
     category?: 'work' | 'personal';
     personalCategory?: string;
 
@@ -39,6 +42,7 @@ interface RawProject {
         description?: string;
         link?: string;
         image?: any;
+        heroImage?: any;
         category?: 'work' | 'personal';
         personalCategory?: string;
         pubDate?: Date | string;
@@ -54,11 +58,11 @@ export interface Props {
 }
 
 let {
-    heading = "Projects",
+    heading = "Work",
     items = [],
     limit = 4,
     viewAllHref,
-    viewAllLabel = "View all projects",
+    viewAllLabel = "View all work",
 } = Astro.props as Props;
 
 function getProjectData(item: RawProject) {
@@ -66,8 +70,11 @@ function getProjectData(item: RawProject) {
 }
 
 if (items.length === 0) {
-    console.warn('[ProjectList] No items provided; fetching from "projects" collection.');
-    items = items.concat((await getCollection("projects")) as RawProject[]).sort((a, b) => {
+    console.warn('[ProjectList] No items provided; fetching work entries from "projects" collection.');
+    items = items.concat(
+        ((await getCollection("projects")) as RawProject[])
+            .filter((project) => getProjectData(project).category === 'work'),
+    ).sort((a, b) => {
         const aDate = getProjectData(a).pubDate;
         const bDate = getProjectData(b).pubDate;
         return new Date(bDate ?? 0).valueOf() - new Date(aDate ?? 0).valueOf();
@@ -94,27 +101,21 @@ const baseUrl =
         : import.meta.env.BASE_URL;
 ---
 
-<section>
-    <div class="max-w-[90rem] mx-auto pt-8 px-8">
-        <div
-            class="grid grid-cols-1 gap-y-24 md:grid-cols-3 border-b py-24 border-base-200"
-        >
-            <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-                <h2
-                    class="text-sm 2xl:text-xl text-base-900 font-bold uppercase"
-                >
+<section class="project-list">
+    <div class="project-list__inner">
+        <div class="project-list__grid">
+            <div class="project-list__heading">
+                <h2 class="project-list__title">
                     {heading}
                 </h2>
             </div>
 
-            <div
-                class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-y-20 gap-x-8"
-            >
+            <div class="project-list__items">
                 {
                     visibleItems.map((item) => {
                         const p = getProjectData(item) || {};
                         const id = (item as any).id;
-                        const href = id ? withBase(`/projects/${id}/`) : (p.link ?? withBase('/projects/'));
+                        const href = id ? withBase(projectPath(id, p.category)) : (p.link ?? withBase('/work/'));
                         const category = p.category as keyof typeof categoryLabels | undefined;
                         const eyebrow = category
                             ? category === 'personal' && p.personalCategory
@@ -126,7 +127,7 @@ const baseUrl =
                             <Card
                                 title={p.title}
                                 href={href}
-                                image={p.image}
+                                image={p.heroImage ?? p.image}
                                 imageAlt={p.title}
                                 description={p.description}
                                 eyebrow={eyebrow}
@@ -138,7 +139,7 @@ const baseUrl =
                 }
                 <Card
                     title={viewAllLabel}
-                    href={`${baseUrl + (viewAllHref ?? '/projects/')}`}
+                    href={`${baseUrl + (viewAllHref ?? '/work/')}`}
                     variant="project"
                 />
             </div>

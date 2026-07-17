@@ -1,13 +1,14 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ProjectPost from '../../layouts/ProjectPost.astro';
+import { findProjectByRouteSlug } from '../../utils/projectRoutes';
 
 const slug = Astro.params.slug;
 const projects = await getCollection('projects');
-const project = projects.find((entry) => entry.id === slug);
+const project = findProjectByRouteSlug(projects, slug, 'personal');
 
 if (!project) {
-	return Astro.redirect('/projects/');
+	return Astro.redirect('/personal-projects/');
 }
 
 const { Content } = await render(project);

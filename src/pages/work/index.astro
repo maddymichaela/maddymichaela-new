@@ -4,9 +4,10 @@ import { getCollection } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 
 import { getSite } from '../../utils/consts';
+import { projectPath } from '../../utils/projectRoutes';
 import { withBase } from '../../utils/slugify';
 
-const projects = (await getCollection('projects')).sort(
+const projects = (await getCollection('projects')).filter((project) => project.data.category === 'work').sort(
 	(a, b) => {
 		if (Number(b.data.featured) !== Number(a.data.featured)) {
 			return Number(b.data.featured) - Number(a.data.featured);
@@ -15,44 +16,29 @@ const projects = (await getCollection('projects')).sort(
 	},
 );
 const site = await getSite();
-
-const categoryLabels = {
-	work: 'Work',
-	personal: 'Personal',
-} as const;
-
-const personalCategoryLabels: Record<string, string> = {
-	cyberdeck: 'Cyberdeck',
-	nas: 'NAS',
-	crafts: 'Crafts',
-	other: 'Other',
-};
 ---
 
-<PageLayout title={`Projects · ${site.title}`} description="Explore case studies and recent builds.">
+<PageLayout title={`Work · ${site.title}`} description="Explore case studies and recent ecommerce work.">
 	<section class="content-shell py-12 space-y-10">
 		<header class="space-y-2">
-			<p class="text-sm uppercase tracking-[0.35em] text-muted">Projects</p>
-			<h1 class="text-4xl font-semibold text-ink">Selected work and personal builds</h1>
+			<p class="text-sm uppercase tracking-[0.35em] text-muted">Work</p>
+			<h1 class="text-4xl font-semibold text-ink">Selected work</h1>
 			<p class="text-muted max-w-3xl">
-				Case studies, ecommerce UI work, home lab experiments, cyberdeck notes, and craft projects.
+				Case studies, ecommerce UI work, and client-facing systems.
 			</p>
 		</header>
 		{projects.length === 0 ? (
-			<p class="text-muted">No projects published yet.</p>
+			<p class="text-muted">No work projects published yet.</p>
 		) : (
 			<div class="space-y-6">
 				{projects.map((project) => (
 					<a
 						class="group block w-full overflow-hidden rounded-[28px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-5 shadow-none transition duration-200 hover:-translate-y-[2px] hover:shadow-[0_18px_45px_color-mix(in_oklab,var(--color-ink)_25%,transparent)] md:flex md:items-center md:gap-6"
-						href={withBase(`/projects/${project.id}/`)}
+						href={withBase(projectPath(project.id, project.data.category))}
 					>
 						<div class="flex flex-1 flex-col">
 							<p class="text-xs font-semibold uppercase tracking-[0.35em] text-muted">
-								{categoryLabels[project.data.category]}
-								{project.data.category === 'personal' && project.data.personalCategory && (
-									<span> · {personalCategoryLabels[project.data.personalCategory]}</span>
-								)}
+								Work
 							</p>
 							<h3 class="mt-2 text-2xl font-semibold text-ink group-hover:text-ink">{project.data.title}</h3>
 							<time class="mt-1 text-xs uppercase tracking-[0.4em] text-muted md:hidden" datetime={project.data.pubDate.toISOString()}>

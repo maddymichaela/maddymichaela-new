@@ -1,11 +1,11 @@
 ---
+import '../styles/components/prose.css';
+
 const { class: className = '' } = Astro.props;
 ---
 
 <article
-	class={
-		`prose prose-neutral dark:prose-invert max-w-none prose-headings:[color:var(--color-ink)] ${className}`.trim()
-	}
+	class:list={['prose-content', className]}
 >
 	<slot />
 </article>

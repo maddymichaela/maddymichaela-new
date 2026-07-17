@@ -16,6 +16,9 @@
  * Slots:
  *  - default: (optional) any extra content to render after the items (e.g. "View all" link)
  */
+import StylizedSeparator from './StylizedSeparator.astro';
+import '../styles/components/section-list.css';
+
 interface Item {
     title: string;
     description?: string;
@@ -40,25 +43,21 @@ function isExternal(href: string) {
 }
 ---
 
-<section>
-    <div class="max-w-[90rem] mx-auto px-8">
-        <div
-            class="grid grid-cols-1 gap-4 md:grid-cols-3 border-b py-8 border-base-200"
-        >
-            <div class="lg:sticky lg:top-24 lg:z-40 self-start">
-                <h2
-                    class="text-sm 2xl:text-xl text-base-900 font-bold uppercase"
-                >
+<section class="section-list">
+    <div class="section-list__inner">
+        <div class="section-list__grid">
+            <div class="section-list__heading">
+                <h2 class="section-list__title">
                     {heading}
                 </h2>
             </div>
 
-            <div class="flex flex-col gap-12 lg:col-span-2">
+            <div class="section-list__items">
                 {
                     items.map((item) => (
-                        <article class="group relative grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-start">
-                            <div class="lg:col-span-2">
-                                <h3 class="text-sm 2xl:text-xl text-base-900 font-bold uppercase">
+                        <article class="section-list__item">
+                            <div class="section-list__item-body">
+                                <h3 class="section-list__item-title">
                                     {item.href ? (
                                         <a
                                             href={item.href}
@@ -77,24 +76,24 @@ function isExternal(href: string) {
                                                     : undefined)
                                             }
                                         >
-                                            <span class="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl" />
-                                            <span class="relative z-10">
-                                                {item.title}
+                                            <span class="section-list__link-hitbox" />
+                                            <span class="section-list__link-label">
+                                                <StylizedSeparator text={item.title} />
                                             </span>
                                         </a>
                                     ) : (
-                                        item.title
+                                        <StylizedSeparator text={item.title} />
                                     )}
                                 </h3>
                                 {item.description && (
-                                    <p class="text-xs 2xl:text-lg mt-1 text-base-600">
+                                    <p class="section-list__description">
                                         {item.description}
                                     </p>
                                 )}
                             </div>
 
                             {item.datetime && (
-                                <p class="text-xs 2xl:text-lg text-base-600 lg:ml-auto">
+                                <p class="section-list__date">
                                     <time datetime={item.datetime}>
                                         {item.dateLabel ?? item.datetime}
                                     </time>
